@@ -20,7 +20,7 @@ namespace Hospitad.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet]
+        [HttpGet("organizations")]
         public async Task<IActionResult> GetOrganizations(OrganizationFilter filter)
         {
             var operation = await _mediator.Send(new GetOrganizationsQuery(User.GetRequestInfo(Request))
