@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hospitad.Common\Hospitad.Common.csproj" />
     <ProjectReference Include="..\Hospitad.Domain\Hospitad.Domain.csproj" />
   </ItemGroup>
 

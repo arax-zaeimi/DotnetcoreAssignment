@@ -11,6 +11,6 @@ namespace Hospitad.Application.Commands.Departments
         public CreateDepartmentCommand(RequestInfo info) : base(info)
         {
 
-        }
+        }        
     }
 }

@@ -12,5 +12,9 @@ namespace Hospitad.Application.Keys
         public static string RegisteredUserLoginFailed => "User Registered but login failed. Please login again.";
         public static string RegisterFailed => "User Registration Failed";
         #endregion
+
+        #region Organization
+        public static string GetOrganizationsFailed => "Load organization list failed.";
+        #endregion
     }
 }
