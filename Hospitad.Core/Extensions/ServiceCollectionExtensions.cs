@@ -45,17 +45,42 @@ namespace Hospitad.Api.Initialization
             // Handlers
             services.AddMediatR(typeof(UserLoginQuery).GetTypeInfo().Assembly);
 
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Hospitad.Api", Version = "1" });
+            //    c.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
+            //    {
+            //        Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+            //        In = ParameterLocation.Header,
+            //        Name = "Authorization",
+            //        Type = SecuritySchemeType.ApiKey,
+            //        Scheme = "Bearer"
+            //    });
+            //});
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Hospitad.Api", Version = "1" });
-                c.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
+                    Title = "My API",
+                    Version = "v1"
                 });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please insert JWT with Bearer into field",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }}, new string[] { }}});
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
@@ -72,12 +97,12 @@ namespace Hospitad.Api.Initialization
         {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));            
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            
+
             services.AddScoped<IOrganizationFactory, OrganizationFactory>();
         }
 
