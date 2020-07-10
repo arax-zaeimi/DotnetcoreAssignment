@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Hospitad.Api.Initialization;
+using Hospitad.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospitad.Api
 {
@@ -69,6 +71,17 @@ namespace Hospitad.Api
             //Use Swagger Middleware
             app.UseSwagger(c => c.RouteTemplate = "swagger/{documentName}/swagger.json");
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("v1/swagger.json", "V1"); });
+
+            RunMigrations(app);
+        }
+
+        private void RunMigrations(IApplicationBuilder app)
+        {
+            using (var scoped = app.ApplicationServices.CreateScope())
+            {
+                var context = scoped.ServiceProvider.GetRequiredService<AppDbContext>();
+                context.Database.Migrate();
+            }
         }
     }
 }
