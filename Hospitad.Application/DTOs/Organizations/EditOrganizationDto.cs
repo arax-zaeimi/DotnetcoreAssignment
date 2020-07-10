@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Hospitad.Application.DTOs.Organizations
 {
-    public class CreateOrganizationDto
+    public class EditOrganizationDto
     {
         public string Title { get; set; }
     }

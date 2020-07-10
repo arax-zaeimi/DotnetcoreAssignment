@@ -13,6 +13,9 @@ namespace Hospitad.Persistence.EntityConfigurations
         {
             builder.HasKey(q => q.Id);
             builder.Property(q => q.Id).UseIdentityAlwaysColumn();
+
+            builder.Property(q => q.CreatedAt).HasDefaultValueSql("Now()").ValueGeneratedOnAdd();
+            builder.Property(q => q.UpdatedAt).HasDefaultValueSql("Now()").ValueGeneratedOnAddOrUpdate();
         }
     }
 }

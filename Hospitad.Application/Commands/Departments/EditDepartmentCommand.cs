@@ -6,15 +6,17 @@ using System.Text;
 
 namespace Hospitad.Application.Commands.Departments
 {
-    public class CreateDepartmentCommand : Request<OperationResult>
+    public class EditDepartmentCommand : Request<OperationResult>
     {
-        public CreateDepartmentCommand(RequestInfo info) : base(info)
+        public EditDepartmentCommand(RequestInfo info) : base(info)
         {
 
-        }   
-        
+        }
+
+        public int DepartmentId { get; set; }
         public string Title { get; set; }
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
+        public bool? Enabled { get; set; }
         public int? ParentDepartmentId { get; set; }
     }
 }

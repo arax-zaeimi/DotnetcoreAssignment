@@ -11,6 +11,6 @@ namespace Hospitad.Application.Models.Departments
         public string Title { get; set; }
         public bool? Enabled { get; set; }
         public int? ParentDepartmentId { get; set; }
-        public int? OrganizationId { get; set; }
+        public List<int> OrganizationIds { get; set; }
     }
 }

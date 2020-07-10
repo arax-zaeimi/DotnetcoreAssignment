@@ -8,6 +8,7 @@ using Hospitad.Persistence;
 using Hospitad.Persistence.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -58,6 +59,13 @@ namespace Hospitad.Api.Initialization
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
+
+            services.AddApiVersioning(o =>
+            {
+                o.ReportApiVersions = true;
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 1);
+            });
         }
 
         public static void AddHospitadServices(this IServiceCollection services)

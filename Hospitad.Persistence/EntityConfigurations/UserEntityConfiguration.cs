@@ -14,7 +14,12 @@ namespace Hospitad.Persistence.EntityConfigurations
             builder.HasKey(q => q.Id);
             builder.Property(q => q.Id).UseIdentityAlwaysColumn();
             builder.HasOne(q => q.Customer).WithMany(u => u.Users).HasForeignKey(q => q.CustomerId);
+
+            builder.HasIndex(q => q.Username);
             
+            builder.Property(q => q.CreatedAt).HasDefaultValueSql("Now()").ValueGeneratedOnAdd();
+            builder.Property(q => q.UpdatedAt).HasDefaultValueSql("Now()").ValueGeneratedOnAddOrUpdate();
+
             builder.Property(q => q.Username).IsRequired();
             builder.Property(q => q.Password).IsRequired();
             builder.Property(q => q.Email).IsRequired();

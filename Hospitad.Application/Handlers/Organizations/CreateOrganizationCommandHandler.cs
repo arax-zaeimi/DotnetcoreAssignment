@@ -5,6 +5,7 @@ using Hospitad.Application.Factories.Organizations;
 using Hospitad.Application.Interfaces;
 using Hospitad.Domain.Organizations;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,9 @@ namespace Hospitad.Application.Handlers.Organizations
         }
         public async Task<OperationResult> Handle(CreateOrganizationCommand request, CancellationToken cancellationToken)
         {
-            var userId = request.GetUserId();
+            var username = request.GetUserName();
 
-            var customer = _unitOfWork.Users.GetAll(false).Where(q => q.Id == userId).Select(q => q.Customer).FirstOrDefault();
+            var customer = await _unitOfWork.Users.GetAll(false).Where(q => q.Username == username).Select(q => q.Customer).FirstOrDefaultAsync();
             if (customer == null)
             {
                 return new OperationResult(result: false, statusCode: 400, message: $"No corresponding customer found for user: {request.GetUserName()}", value: null);
