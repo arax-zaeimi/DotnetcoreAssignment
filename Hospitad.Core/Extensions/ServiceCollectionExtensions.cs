@@ -45,42 +45,33 @@ namespace Hospitad.Api.Initialization
             // Handlers
             services.AddMediatR(typeof(UserLoginQuery).GetTypeInfo().Assembly);
 
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Hospitad.Api", Version = "1" });
-            //    c.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
-            //    {
-            //        Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-            //        In = ParameterLocation.Header,
-            //        Name = "Authorization",
-            //        Type = SecuritySchemeType.ApiKey,
-            //        Scheme = "Bearer"
-            //    });
-            //});
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "My API",
+                    Title = "Hospitad.Api",
                     Version = "v1"
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey
                 });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }}, new string[] { }}});
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        }, new string[] { }
+                    }
+                });
             });
 
             services.AddSwaggerGenNewtonsoftSupport();
