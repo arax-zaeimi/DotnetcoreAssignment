@@ -46,14 +46,7 @@ namespace Hospitad.Application.Handlers.Departments
 
             var entities = await _unitOfWork.Departments.GetAllByFilterAsync(request.Filter);
 
-            IList<DepartmentDto> departments = entities
-                .Select(q => new DepartmentDto()
-                {
-                    Id = q.Id,
-                    Title = q.Title,
-                    OrganizationId = q.OrganizationId,
-                    ParentDepartmentId = q.ParentDepartmentId
-                }).ToList();
+            IList<DepartmentDto> departments = LoadDepartmentsStructure(entities);
 
             var result = new ListResult<DepartmentDto>
             {
@@ -63,6 +56,36 @@ namespace Hospitad.Application.Handlers.Departments
             };
 
             return new OperationResult(true, 200, message: "", value: result);
+        }
+
+        private IList<DepartmentDto> LoadDepartmentsStructure(ICollection<Department> entities, bool isRoot = true)
+        {
+            IList<DepartmentDto> departmentsDtoList = new List<DepartmentDto>();
+
+            foreach (var departmentEntity in entities)
+            {
+                var departmentDto = new DepartmentDto()
+                {
+                    Id = departmentEntity.Id,
+                    OrganizationId = departmentEntity.OrganizationId,
+                    ParentDepartmentId = departmentEntity.ParentDepartmentId,
+                    Title = departmentEntity.Title
+                };
+                
+                if(!isRoot || (isRoot && departmentEntity.ParentDepartmentId == null))
+                {
+                    departmentsDtoList.Add(departmentDto);
+                }
+
+                if(departmentEntity.SubDepartments.Any())
+                {
+                    var subDepartments = LoadDepartmentsStructure(departmentEntity.SubDepartments, false);
+                    departmentDto.SubDepartments = subDepartments;
+                }
+            }
+
+
+            return departmentsDtoList;
         }
     }
 }
