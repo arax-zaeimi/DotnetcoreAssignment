@@ -42,7 +42,22 @@ namespace Hospitad.Application.Handlers.Departments
                 return new OperationResult(true, 200, message: "No organizations defined for this user", value: null);
             }
 
-            request.Filter.OrganizationIds = customer.Organizations.Select(q => q.Id).Distinct().ToList();
+            //Customer can see its own organizations only
+            var customerValidOrganizations = customer.Organizations.Select(q => q.Id).Distinct().ToList();
+            if (request.Filter.OrganizationIds == null || !request.Filter.OrganizationIds.Any())
+            {
+                request.Filter.OrganizationIds = customerValidOrganizations;
+            }
+            else
+            {
+                foreach (var orgId in request.Filter.OrganizationIds)
+                {
+                    if(!customerValidOrganizations.Any(q => q == orgId))
+                    {
+                        return new OperationResult(result: false, statusCode: 400, message: $"Access Denied to OrganizationId :{orgId}", value: null);
+                    }
+                }
+            }            
 
             var entities = await _unitOfWork.Departments.GetAllByFilterAsync(request.Filter);
             if(!entities.Any())
