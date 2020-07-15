@@ -45,6 +45,10 @@ namespace Hospitad.Application.Handlers.Departments
             request.Filter.OrganizationIds = customer.Organizations.Select(q => q.Id).Distinct().ToList();
 
             var entities = await _unitOfWork.Departments.GetAllByFilterAsync(request.Filter);
+            if(!entities.Any())
+            {
+                return new OperationResult(true, 204, message: "No departments defined for this customer", value: null);
+            }
 
             IList<DepartmentDto> departments = LoadDepartmentsStructure(entities);
 
@@ -77,7 +81,7 @@ namespace Hospitad.Application.Handlers.Departments
                     departmentsDtoList.Add(departmentDto);
                 }
 
-                if(departmentEntity.SubDepartments.Any())
+                if(departmentEntity.SubDepartments != null && departmentEntity.SubDepartments.Any())
                 {
                     var subDepartments = LoadDepartmentsStructure(departmentEntity.SubDepartments, false);
                     departmentDto.SubDepartments = subDepartments;

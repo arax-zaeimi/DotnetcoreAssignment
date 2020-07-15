@@ -1,5 +1,6 @@
 ﻿using Hospitad.Application.Commands.Organizations;
 using Hospitad.Application.DTOs;
+using Hospitad.Application.DTOs.Organizations;
 using Hospitad.Application.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -46,7 +47,13 @@ namespace Hospitad.Application.Handlers.Organizations
 
             if(await _unitOfWork.SaveChangesAsync())
             {
-                return new OperationResult(result: true, statusCode: 200, message: $"Organization with Id: {organization.Id} Updated", value: organization, entityId: organization.Id);
+                var organizationDto = new OrganizationDto()
+                {
+                    Id = organization.Id,
+                    Title = organization.Title
+                };
+
+                return new OperationResult(result: true, statusCode: 200, message: $"Organization with Id: {organizationDto.Id} Updated", value: organizationDto, entityId: organizationDto.Id);
             }
             else
             {

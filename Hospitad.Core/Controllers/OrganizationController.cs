@@ -49,7 +49,7 @@ namespace Hospitad.Api.Controllers
             if (operation.Failed)
                 return this.ReturnErrorResponse(operation, Messages.CreateOrganizationFailed);
 
-            return Ok(operation.Value);
+            return Created("", operation.Value);
         }
 
         [HttpPut("{id}")]
@@ -80,7 +80,7 @@ namespace Hospitad.Api.Controllers
             if (operation.Failed)
                 return this.ReturnErrorResponse(operation, Messages.EditOrganizationFailed);
 
-            return Ok(operation.Value);
+            return Ok(operation.Message);
         }
     }
 }

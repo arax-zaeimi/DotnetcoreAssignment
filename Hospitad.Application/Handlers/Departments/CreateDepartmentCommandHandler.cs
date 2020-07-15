@@ -23,7 +23,7 @@ namespace Hospitad.Application.Handlers.Departments
         }
         public async Task<OperationResult> Handle(CreateDepartmentCommand request, CancellationToken cancellationToken)
         {
-            if(request.OrganizationId < 1)
+            if (request.OrganizationId < 1)
             {
                 return new OperationResult(result: false, statusCode: 400, message: $"Invalid Organization", value: null);
             }
@@ -38,16 +38,16 @@ namespace Hospitad.Application.Handlers.Departments
             }
 
             var organization = await _unitOfWork.Organizations.GetAll(true).Where(q => q.Id == request.OrganizationId).FirstOrDefaultAsync(cancellationToken);
-            if(organization == null)
+            if (organization == null)
             {
                 return new OperationResult(result: false, statusCode: 400, message: $"Invalid Organization", value: null);
             }
 
             //The parent department should be valid and related to the current organization
-            if(request.ParentDepartmentId != null)
+            if (request.ParentDepartmentId != null)
             {
                 var isParentValid = await _unitOfWork.Departments.GetAll(false).AnyAsync(q => q.OrganizationId == organization.Id && q.Id == request.ParentDepartmentId);
-                if(!isParentValid)
+                if (!isParentValid)
                 {
                     return new OperationResult(result: false, statusCode: 400, message: $"Invalid Parent Department", value: null);
                 }
@@ -65,10 +65,10 @@ namespace Hospitad.Application.Handlers.Departments
 
             if (await _unitOfWork.SaveChangesAsync())
             {
-                return new OperationResult(result: true, 
-                    statusCode: 201, 
-                    message: $"Department Created with Id: {department.Id}", 
-                    value: new DepartmentDto() { Title = department.Title, Id = department.Id }, 
+                return new OperationResult(result: true,
+                    statusCode: 201,
+                    message: $"Department Created with Id: {department.Id}",
+                    value: new DepartmentDto() { Title = department.Title, Id = department.Id, OrganizationId = department.OrganizationId, ParentDepartmentId = department.ParentDepartmentId },
                     entityId: department.Id);
             }
             else

@@ -42,7 +42,13 @@ namespace Hospitad.Application.Handlers.Organizations
 
             if (await _unitOfWork.SaveChangesAsync())
             {
-                return new OperationResult(result: true, statusCode: 201, message: $"Organization Created with Id: {organization.Id}", value: organization, entityId: organization.Id);
+                var organizationDto = new OrganizationDto()
+                {
+                    Id = organization.Id,
+                    Title = organization.Title
+                };
+
+                return new OperationResult(result: true, statusCode: 201, message: $"Organization Created with Id: {organizationDto.Id}", value: organizationDto, entityId: organizationDto.Id);
             }
             else
             {

@@ -31,20 +31,21 @@ namespace Hospitad.Application.Handlers.Organizations
             {
                 return new OperationResult(result: false, statusCode: 400, message: $"No corresponding customer found for user: {request.GetUserName()}", value: null);
             }
-            
+
             request.Filter.CustomerId = customer.Id;
 
             var entities = await _unitOfWork.Organizations.GetAllByFilterAsync(request.Filter);
-            IList<OrganizationDto> organizations = null;
-            if(entities != null)
-            {
-                organizations = entities.Select(q => new OrganizationDto()
-                {
-                    Id = q.Id,
-                    Title = q.Title
-                }).ToList();
 
+            if (!entities.Any())
+            {
+                return new OperationResult(true, 200, message: "No organizations defined for this user", value: null);
             }
+
+            IList<OrganizationDto> organizations = entities.Select(q => new OrganizationDto()
+            {
+                Id = q.Id,
+                Title = q.Title
+            }).ToList();
 
             var result = new ListResult<OrganizationDto>
             {

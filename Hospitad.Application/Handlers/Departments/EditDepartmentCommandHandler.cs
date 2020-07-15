@@ -48,6 +48,11 @@ namespace Hospitad.Application.Handlers.Departments
                 department.Title = request.Title;
             }
 
+            if(request.ParentDepartmentId == department.Id)
+            {
+                return new OperationResult(result: false, statusCode: 400, message: $"Recursive Parent Department Hazard! Please Choose another department as parent.", value: null);
+            }
+
             department.ParentDepartmentId = request.ParentDepartmentId;
             department.OrganizationId = request.OrganizationId.Value;
 

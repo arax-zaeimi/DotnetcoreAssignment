@@ -54,7 +54,7 @@ namespace Hospitad.Api.Controllers
             if (operation.Failed)
                 return this.ReturnErrorResponse(operation, Messages.CreateDepartmentFailed);
 
-            return Ok(operation.Value);
+            return Created("", operation.Value);
         }
 
         [HttpPut("{id}")]
@@ -88,7 +88,7 @@ namespace Hospitad.Api.Controllers
             if (operation.Failed)
                 return this.ReturnErrorResponse(operation, Messages.DeleteDepartmentFailed);
 
-            return Ok(operation.Value);
+            return Ok(operation.Message);
         }
     }
 }
